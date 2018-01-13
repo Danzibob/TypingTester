@@ -106,7 +106,8 @@ function finished(time) {
   // Show the user a message with their time
   console.log(keys)
   $("#message").html("Completed!")
-  $("#sub-message").html("Your time: " + (time / 1000) + " seconds")
+  $("#sub-message").html("Your time: " + (time / 1000) + " seconds\n")
+  alert(keys)
   $("#TyperContainer").hide()
   $("#message-box").show()
   $("#nextText").on("click", function() {
