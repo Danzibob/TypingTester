@@ -8,6 +8,7 @@ $(window).on("load", function() {
 
 $(document).on('keydown', function(e) {
   let key = event.keyCode || event.charCode
+  alert(key)
   if (32 <= key && key < 90 || 96 < key && key < 123) {
     keys += String.fromCharCode(key)
     return
