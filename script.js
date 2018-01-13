@@ -1,7 +1,12 @@
+let uid = Math.random().toString(36).substr(2, 10);
 let i = Math.floor(Math.random() * 2)
 let startTime = undefined
 let keys = ""
 let lastVal = ""
+let stats = {
+	regularKeys: 0,
+	autocompletes: 0
+}
 const shiftThreshold = 12
 $(window).on("load", function() {
 	setup(texts[i])
@@ -32,10 +37,9 @@ function setup(text) {
 		let val = $("#TextEntry").val()
 
 		addToKeys = inferAction(lastVal, val)
-		console.log(keys, addToKeys)
 		keys += addToKeys
 
-		$("#Legend").html(keys)
+		$("#Legend").html(`${escapeLTGT(keys)}  keypresses: ${stats.regularKeys}  autocompletes: ${stats.autocompletes}`)
 
 		lastVal = val
 
@@ -92,6 +96,8 @@ function splitTextToSpans(text) {
 
 
 function finished(time) {
+	let line = `${uid},${i},${time},${stats.regularKeys},${stats.autocompletes},${keys}`
+	console.log(line)
 	// Show the user a message with their time
 	$("#message").html("Completed!")
 	$("#sub-message").html("Your time: " + (time / 1000) + " seconds\n")
@@ -108,43 +114,54 @@ function finished(time) {
 }
 
 function inferAction(oldText, newText) {
-	console.log(oldText, newText)
 	let lengthIncrease = newText.length - oldText.length
 
 	if (lengthIncrease == 1) {
 		// If only the last character is different
 		if (oldText == newText.slice(0, -lengthIncrease)) {
 			// Then a character has been typed
+			stats.regularKeys++;
 			return newText.slice(-1)
 		} else {
 			// Otherwise, a word has been auto(completed/corrected)
-			return "&gt;({})".format(newText.slice(-1))
+			stats.autocompletes++;
+			return `>(${newText.split(" ").slice(-1)[0]})`
 		}
 
 	} else if (lengthIncrease > 1) {
 		// The word has been autocompleted
-		return "[{}]".format(newText.slice(-lengthIncrease))
+		stats.autocompletes++;
+		return `[${newText.split(" ").slice(-1)[0]}]`
 
 	} else if (lengthIncrease == -1) {
 		// If only the last character is different
 		if (oldText.slice(0, -1) == newText) {
 			// Then a character has been deleted
-			return "&lt;"
+			stats.regularKeys++;
+			return "<"
 		} else {
 			// Otherwise, a word has been autocorrected
-			return "(&lt;)"
+			stats.autocompletes++;
+			return "(<)"
 		}
 
 	} else if (lengthIncrease < -1) {
 		//More that one letter has been deleted
-		return "&lt;" * -lengthIncrease
+		stats.regularKeys++;
+		return "<;" * -lengthIncrease
 
 	} else {
 		//Text is the same length
 		if (oldText == newText) {
 			return ""
 		} else {
+			stats.autocompletes++;
 			return "()"
 		}
 	}
+}
+
+
+function escapeLTGT(unsafe) {
+	return unsafe.replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
