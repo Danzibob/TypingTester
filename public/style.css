@@ -1,0 +1,28 @@
+*{
+	font-family: monospace;
+}
+
+body {
+	width:90vw;
+	margin: auto;
+}
+
+.typing {
+	font-size: 40pt;
+}
+
+#TextContainer {
+	width: 100%;
+	padding-left: 2px;
+	white-space: nowrap;
+	overflow-x: hidden;
+}
+
+#WarningArrow {
+	position: absolute;
+
+}
+
+#message-box {
+	display: none;
+}
