@@ -1,4 +1,3 @@
-
 let uid = Math.random().toString(36).substr(2, 10);
 let i = Math.floor(Math.random() * 2)
 let startTime = undefined
@@ -175,7 +174,7 @@ function inferAction(oldText, newText) {
 			return ""
 		} else {
 			stats.autocompletes++;
-			return "(" + newText.split(" ").slice(-1)[0] + ")"
+			return "()"
 		}
 	}
 }
