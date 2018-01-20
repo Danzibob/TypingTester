@@ -7,6 +7,7 @@ let stats = {
 	regularKeys: 0,
 	autocompletes: 0
 }
+let textNumber = 0
 const shiftThreshold = 12
 $(window).on("load", function() {
 	setup(texts[i])
@@ -107,7 +108,7 @@ function splitTextToSpans(text) {
 function finished(time) {
 	let line = `${uid}\t${i}\t${time}\t${stats.regularKeys}\t${stats.autocompletes}\t${keys}`
 	$.ajax({
-		url: "http://145.239.78.249/log",
+		url: "http://hacs.danzibob.co.uk/log",
 		type: "POST",
 		data: line,
 		contentType: "text/plain; charset=utf-8",
@@ -116,12 +117,18 @@ function finished(time) {
 	console.log(line)
 	// Show the user a message with their time
 	$("#message").html("Completed!")
-	$("#sub-message").html("Your time: " + (time / 1000) + " seconds\n")
 	$("#TyperContainer").hide()
 	$("#message-box").show()
+	if (textNumber == 0) {
+		$("#sub-message").html("Wait for the experimenter before you press the button")
+	} else {
+		$("#nextText").hide()
+		$("#sub-message").html("Thank you for participating!")
+	}
 	$("#nextText").on("click", function() {
 		// Switch the text and reset the page
 		i = (i + 1) % 2
+		textNumber++
 		setup(texts[i])
 		$("#TyperContainer").show()
 		$("#message-box").hide()
