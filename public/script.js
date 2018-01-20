@@ -1,4 +1,3 @@
-
 let uid = Math.random().toString(36).substr(2, 10);
 let i = Math.floor(Math.random() * 2)
 let startTime = undefined
@@ -38,7 +37,7 @@ function setup(text) {
 		let val = $("#TextEntry").val()
 
 		//Because autocomplete is fecking weird
-		if (lastVal.length > 0 && val == ""){
+		if (lastVal.length > 0 && val == "") {
 			return
 		}
 
@@ -104,10 +103,10 @@ function splitTextToSpans(text) {
 function finished(time) {
 	let line = `${uid}\t${i}\t${time}\t${stats.regularKeys}\t${stats.autocompletes}\t${keys}`
 	$.ajax({
-		url:"http://145.239.78.249/log",
-		type:"POST",
-		data:line,
-		contentType:"text/plain; charset=utf-8",
+		url: "http://145.239.78.249/log",
+		type: "POST",
+		data: line,
+		contentType: "text/plain; charset=utf-8",
 		success: console.log
 	})
 	console.log(line)
@@ -140,7 +139,7 @@ function inferAction(oldText, newText) {
 			stats.autocompletes++;
 			let words = newText.split(" ")
 			// If the last char is a space: autocorrected
-			if (words.slice(-1)[0] == "" && words.length > 1){
+			if (words.slice(-1)[0] == "" && words.length > 1) {
 				return ">(" + words.slice(-2)[0] + ") "
 			}
 			// Otherwise it is autocomplete
@@ -167,7 +166,7 @@ function inferAction(oldText, newText) {
 	} else if (lengthIncrease < -1) {
 		//More that one letter has been deleted
 		stats.regularKeys++;
-		return "<;" * -lengthIncrease
+		return "(<<)"
 
 	} else {
 		//Text is the same length
