@@ -1,1 +1,1 @@
-npm test > public/data.csv
+node index.js > public/data.csv
