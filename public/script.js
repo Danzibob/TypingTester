@@ -5,7 +5,8 @@ let keys = ""
 let lastVal = ""
 let stats = {
 	regularKeys: 0,
-	autocompletes: 0
+	autocompletes: 0,
+	errors: 0,
 }
 let textNumber = 0
 const shiftThreshold = 12
@@ -60,13 +61,14 @@ function setup(text) {
 		}
 
 		// If the user has finished, display their time
-		if (val == target) {
+		if (val.length == target.length) {
 			let time = new Date().getTime() - startTime
 			finished(time)
 		}
 
 		// For each character...
 		// (this is neccessary because of autocomplete)
+		let errors = 0
 		for (let i = 0; i < target.length; i++) {
 			// ...decide what color it should be,
 			let color = "#FFFFFF"
@@ -74,10 +76,12 @@ function setup(text) {
 				color = "#4CAF50"
 			} else if (val[i] !== undefined) {
 				color = "#F44336"
+				errors++
 			}
 			// and assign that color
 			$("#char-" + i).css("background-color", color)
 		}
+		stats.errors = errors
 
 		// Show and hide letters in order to shift along
 		for (let i = 0; i < val.length - shiftThreshold; i++) {
@@ -106,7 +110,7 @@ function splitTextToSpans(text) {
 
 
 function finished(time) {
-	let line = `${uid}\t${i}\t${time}\t${stats.regularKeys}\t${stats.autocompletes}\t${keys}`
+	let line = `${uid}\t${i}\t${time}\t${stats.regularKeys}\t${stats.autocompletes}\t${stats.errors}\t${keys}`
 	$.ajax({
 		url: "http://hacs.danzibob.co.uk/log",
 		type: "POST",
