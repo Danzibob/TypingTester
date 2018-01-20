@@ -148,7 +148,7 @@ function inferAction(oldText, newText) {
 	} else if (lengthIncrease < -1) {
 		//More that one letter has been deleted
 		stats.regularKeys++;
-		return "<;" * -lengthIncrease
+		return "(<<)"
 
 	} else {
 		//Text is the same length
