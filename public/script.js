@@ -50,7 +50,7 @@ function setup(text) {
 		addToKeys = inferAction(lastVal, val)
 		keys += addToKeys
 
-		$("#Legend").html(`${escapeLTGT(keys)}  keypresses: ${stats.regularKeys}  autocompletes: ${stats.autocompletes}`)
+		//$("#Legend").html(`${escapeLTGT(keys)}  keypresses: ${stats.regularKeys}  autocompletes: ${stats.autocompletes}`)
 
 		lastVal = val
 
