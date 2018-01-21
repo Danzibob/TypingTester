@@ -38,9 +38,8 @@ function setup(text) {
 	$("#TextEntry").val("").bind("input", function() {
 		let val = $("#TextEntry").val()
 
-		while (val.indexOf("\‘") > -1) {
-			val = val.replace('\‘', '\'');
-		}
+		//Because Apple are fecking weird
+		val = val.replace(/’/g, "'");
 
 		//Because autocomplete is fecking weird
 		if (lastVal.length > 0 && val == "") {

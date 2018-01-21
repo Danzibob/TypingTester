@@ -5,8 +5,10 @@ let keys = ""
 let lastVal = ""
 let stats = {
 	regularKeys: 0,
-	autocompletes: 0
+	autocompletes: 0,
+	errors: 0,
 }
+let textNumber = 0
 const shiftThreshold = 12
 $(window).on("load", function() {
 	setup(texts[i])
@@ -36,15 +38,19 @@ function setup(text) {
 	$("#TextEntry").val("").bind("input", function() {
 		let val = $("#TextEntry").val()
 
+		while (val.indexOf("\‘") > -1) {
+			val = val.replace('\‘', '\'');
+		}
+
 		//Because autocomplete is fecking weird
-		if (lastVal.length > 0 && val == ""){
+		if (lastVal.length > 0 && val == "") {
 			return
 		}
 
 		addToKeys = inferAction(lastVal, val)
 		keys += addToKeys
 
-		$("#Legend").html(`${escapeLTGT(keys)}  keypresses: ${stats.regularKeys}  autocompletes: ${stats.autocompletes}`)
+		//$("#Legend").html(`${escapeLTGT(keys)}  keypresses: ${stats.regularKeys}  autocompletes: ${stats.autocompletes}`)
 
 		lastVal = val
 
@@ -55,13 +61,14 @@ function setup(text) {
 		}
 
 		// If the user has finished, display their time
-		if (val == target) {
+		if (val.length == target.length) {
 			let time = new Date().getTime() - startTime
 			finished(time)
 		}
 
 		// For each character...
 		// (this is neccessary because of autocomplete)
+		let errors = 0
 		for (let i = 0; i < target.length; i++) {
 			// ...decide what color it should be,
 			let color = "#FFFFFF"
@@ -69,10 +76,12 @@ function setup(text) {
 				color = "#4CAF50"
 			} else if (val[i] !== undefined) {
 				color = "#F44336"
+				errors++
 			}
 			// and assign that color
 			$("#char-" + i).css("background-color", color)
 		}
+		stats.errors = errors
 
 		// Show and hide letters in order to shift along
 		for (let i = 0; i < val.length - shiftThreshold; i++) {
@@ -101,23 +110,21 @@ function splitTextToSpans(text) {
 
 
 function finished(time) {
-	let line = `${uid}\t${i}\t${time}\t${stats.regularKeys}\t${stats.autocompletes}\t${keys}`
-	$.ajax({
-		url:"http://145.239.78.249/log",
-		type:"POST",
-		data:line,
-		contentType:"text/plain; charset=utf-8",
-		success: console.log
-	})
 	console.log(line)
 	// Show the user a message with their time
 	$("#message").html("Completed!")
-	$("#sub-message").html("Your time: " + (time / 1000) + " seconds\n")
 	$("#TyperContainer").hide()
 	$("#message-box").show()
+	if (textNumber == 0) {
+		$("#sub-message").html("Wait for the experimenter before you press the button")
+	} else {
+		$("#nextText").hide()
+		$("#sub-message").html("Thank you for participating!")
+	}
 	$("#nextText").on("click", function() {
 		// Switch the text and reset the page
 		i = (i + 1) % 2
+		textNumber++
 		setup(texts[i])
 		$("#TyperContainer").show()
 		$("#message-box").hide()
@@ -139,7 +146,7 @@ function inferAction(oldText, newText) {
 			stats.autocompletes++;
 			let words = newText.split(" ")
 			// If the last char is a space: autocorrected
-			if (words.slice(-1)[0] == "" && words.length > 1){
+			if (words.slice(-1)[0] == "" && words.length > 1) {
 				return ">(" + words.slice(-2)[0] + ") "
 			}
 			// Otherwise it is autocomplete
@@ -165,8 +172,7 @@ function inferAction(oldText, newText) {
 
 	} else if (lengthIncrease < -1) {
 		//More that one letter has been deleted
-		stats.regularKeys++;
-		return "<;" * -lengthIncrease
+		return "(<<)"
 
 	} else {
 		//Text is the same length
@@ -174,7 +180,7 @@ function inferAction(oldText, newText) {
 			return ""
 		} else {
 			stats.autocompletes++;
-			return "()"
+			return "(" + newText.split(" ").slice(-1)[0] + ")"
 		}
 	}
 }
