@@ -18,7 +18,7 @@ app.post('/log', textParser, function(req, res) {
 })
 
 app.use('/', express.static('public'));
-app.use('/tryit', express.static('public'));
+app.use('/tryit', express.static('tryit'));
 
 // Turn on that server!
 app.listen(80);
