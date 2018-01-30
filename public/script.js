@@ -17,6 +17,7 @@ $(window).on("load", function() {
 function setup(text) {
 	//Reset things
 	$("#Legend").html("")
+	$("#demographics").hide()
 	startTime = undefined
 	lastVal = ""
 	keys = ""
@@ -118,7 +119,6 @@ function finished(time) {
 		success: console.log
 	})
 	console.log(line)
-	// Show the user a message with their time
 	$("#message").html("Completed!")
 	$("#TyperContainer").hide()
 	$("#message-box").show()
@@ -126,7 +126,9 @@ function finished(time) {
 		$("#sub-message").html("Wait for the experimenter before you press the button")
 	} else {
 		$("#nextText").hide()
-		$("#sub-message").html("Thank you for participating!")
+		$("#sub-message").html("Please fill out this form before you leave. All data is anonymous")
+		$("#demographics").show()
+		$("#ID").value(uid)
 	}
 	$("#nextText").on("click", function() {
 		// Switch the text and reset the page
