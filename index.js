@@ -12,7 +12,21 @@ app.post('/log', textParser, function(req, res) {
 	if (!req.body) {
 		return res.sendStatus(400)
 	} else {
-		console.log(req.body)
+		console.log("TYPE\t" + req.body)
+	}
+	res.send("OK")
+})
+
+app.post('/submit', textParser, function(req, res) {
+	if (!req.body) {
+		return res.sendStatus(400)
+	} else {
+		let keys = ["id", "gender", "age", "autocorrect", "autocomplete", "OS"]
+		let data = []
+		for (key of keys) {
+			data.push(req.params[key])
+		}
+		console.log("FORM\t" + data.join("\t"))
 	}
 	res.send("OK")
 })

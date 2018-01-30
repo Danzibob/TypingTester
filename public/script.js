@@ -128,7 +128,7 @@ function finished(time) {
 		$("#nextText").hide()
 		$("#sub-message").html("Please fill out this form before you leave. All data is anonymous")
 		$("#demographics").show()
-		$("#ID").value(uid)
+		$("#ID").val(uid)
 	}
 	$("#nextText").on("click", function() {
 		// Switch the text and reset the page
