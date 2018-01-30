@@ -1,16 +1,43 @@
 <html>
 <head>
-
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
 <form action="/submit">
+  <label>What is your gender?</label><br>
   <input type="radio" name="gender" value="M" reqired> Male<br>
   <input type="radio" name="gender" value="F"> Female<br>
   <input type="radio" name="gender" value="O"> Other<br>
+  <input type="radio" name="gender" value="P"> Prefer not to say<br>
+  <hr>
   
+  <label>What is your age?</label><br>
+  <input class="textInput" type="number" name="age" value="18" step="1" min="18" max="200"><br>
+  <hr>
 
+  <label>Do you usually use <em>autocorrect</em> on your device?</label><br>
+  <input type="radio" name="autocorrect" value="Y" reqired> Yes<br>
+  <input type="radio" name="autocorrect" value="N"> No<br>
+  <input type="radio" name="autocorrect" value="S"> Sometimes<br>
+  <hr>
+
+  <label>Do you usually use <em>word suggestions</em> on your device (aka autocomplete)?</label><br>
+  <input type="radio" name="autocomplete" value="Y" reqired> Yes<br>
+  <input type="radio" name="autocomplete" value="N"> No<br>
+  <input type="radio" name="autocomplete" value="S"> Sometimes<br>
+  <hr>
+
+  <label>What operating system is your mobile device?</label><br>
+  <input type="radio" name="OS" value="A" reqired> Android<br>
+  <input type="radio" name="OS" value="I"> IOS<br>
+  <input type="radio" name="OS" value="W"> Windows<br>
+  <input type="radio" name="OS" value="O"> Other<br>
+
+  <input id="ID" type="hidden" name="id" value="">
+  <hr>
   
+  <input class="textInput" type="submit" value="Submit">
 </form>
 
 
