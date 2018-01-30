@@ -110,7 +110,6 @@ function splitTextToSpans(text) {
 
 
 function finished(time) {
-	console.log(line)
 	// Show the user a message with their time
 	$("#message").html("Completed!")
 	$("#TyperContainer").hide()
