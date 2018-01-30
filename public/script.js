@@ -9,6 +9,7 @@ let stats = {
 	errors: 0,
 }
 let textNumber = 0
+let submitted = false
 const shiftThreshold = 12
 $(window).on("load", function() {
 	setup(texts[i])
@@ -24,6 +25,7 @@ function setup(text) {
 
 	// Set the content of the text to be typed
 	let target = text
+	console.log(target)
 	$("#TypeThis").html(splitTextToSpans(target))
 
 	let usedWidth = $("#TextEntry").width()
@@ -61,7 +63,7 @@ function setup(text) {
 		}
 
 		// If the user has finished, display their time
-		if (val.length == target.length) {
+		if (val.length == texts[i].length && !submitted) {
 			let time = new Date().getTime() - startTime
 			finished(time)
 		}
@@ -69,17 +71,17 @@ function setup(text) {
 		// For each character...
 		// (this is neccessary because of autocomplete)
 		let errors = 0
-		for (let i = 0; i < target.length; i++) {
+		for (let l = 0; l < texts[i].length; l++) {
 			// ...decide what color it should be,
 			let color = "#FFFFFF"
-			if (val[i] == target[i]) {
+			if (val[l] == texts[i][l]) {
 				color = "#4CAF50"
-			} else if (val[i] !== undefined) {
+			} else if (val[l] !== undefined) {
 				color = "#F44336"
 				errors++
 			}
 			// and assign that color
-			$("#char-" + i).css("background-color", color)
+			$("#char-" + l).css("background-color", color)
 		}
 		stats.errors = errors
 
@@ -110,9 +112,10 @@ function splitTextToSpans(text) {
 
 
 function finished(time) {
+	submitted = true
 	let line = `${uid}\t${i}\t${time}\t${stats.regularKeys}\t${stats.autocompletes}\t${stats.errors}\t${keys}`
 	$.ajax({
-		url: "http://hacs.danzibob.co.uk/log",
+		url: "/log",
 		type: "POST",
 		data: line,
 		contentType: "text/plain; charset=utf-8",
@@ -138,6 +141,7 @@ function finished(time) {
 		$("#TyperContainer").show()
 		$("#message-box").hide()
 		$("TextEntry").show().focus()
+		submitted = false
 	})
 }
 

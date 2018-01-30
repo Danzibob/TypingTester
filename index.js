@@ -17,14 +17,14 @@ app.post('/log', textParser, function(req, res) {
 	res.send("OK")
 })
 
-app.post('/submit', textParser, function(req, res) {
+app.get('/submit', textParser, function(req, res) {
 	if (!req.body) {
 		return res.sendStatus(400)
 	} else {
 		let keys = ["id", "gender", "age", "autocorrect", "autocomplete", "OS"]
 		let data = []
 		for (key of keys) {
-			data.push(req.params[key])
+			data.push(req.query[key])
 		}
 		console.log("FORM\t" + data.join("\t"))
 	}
@@ -35,4 +35,4 @@ app.use('/', express.static('public'));
 app.use('/tryit', express.static('tryit'));
 
 // Turn on that server!
-app.listen(80);
+app.listen(3000);
